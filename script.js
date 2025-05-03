@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const [title, url] = line.split(' ');
                 if (title && url) {
                     const item = document.createElement('div');
-                    item.className = 'p-3 border-bottom';
+                    item.className = 'p-3 border-bottom d-flex justify-content-between align-items-center';
                     
                     const link = document.createElement('a');
                     link.href = url;
@@ -17,7 +17,21 @@ document.addEventListener('DOMContentLoaded', function() {
                     link.target = '_blank';
                     link.className = 'text-decoration-none text-primary';
                     
+                    // 閲覧回数を取得
+                    const viewCount = localStorage.getItem(title) || 0;
+                    const viewCountSpan = document.createElement('span');
+                    viewCountSpan.className = 'badge bg-secondary';
+                    viewCountSpan.textContent = `閲覧回数: ${viewCount}`;
+                    
+                    // リンククリック時の閲覧回数更新
+                    link.addEventListener('click', () => {
+                        const currentCount = parseInt(localStorage.getItem(title) || 0);
+                        localStorage.setItem(title, currentCount + 1);
+                        viewCountSpan.textContent = `閲覧回数: ${currentCount + 1}`;
+                    });
+                    
                     item.appendChild(link);
+                    item.appendChild(viewCountSpan);
                     kihuList.appendChild(item);
                 }
             });
