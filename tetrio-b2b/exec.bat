@@ -28,11 +28,10 @@ if %choice% gtr %count% goto invalid
 set "selectedfile=!file%choice%!"
 echo.
 echo 選択されたファイル: %selectedfile%
-echo URLをランダムに並び替えて開いています...
+echo URLを開いています...
 echo.
 
-:: PowerShellを使ってファイルをランダムに並び替えて直接処理
-for /f "usebackq delims=" %%i in (`powershell -Command "Get-Content '%selectedfile%' | Sort-Object {Get-Random}"`) do (
+for /f "usebackq delims=" %%i in ("%selectedfile%") do (
     echo 開いています: %%i
     start chrome "%%i"
     timeout /t 0.1 >nul
