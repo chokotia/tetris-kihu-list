@@ -28,13 +28,18 @@ if %choice% gtr %count% goto invalid
 set "selectedfile=!file%choice%!"
 echo.
 echo 選択されたファイル: %selectedfile%
+echo.
+
+echo ストップウォッチサイトを開いています...
+start chrome "https://stopwatch.onl.jp/"
+echo.
+
 echo URLを開いています...
 echo.
 
 for /f "usebackq delims=" %%i in ("%selectedfile%") do (
     echo 開いています: %%i
     start chrome "%%i"
-    timeout /t 0.1 >nul
 )
 
 echo.
