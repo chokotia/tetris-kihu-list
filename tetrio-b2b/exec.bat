@@ -36,14 +36,16 @@ echo.
 
 echo URLを開いています...
 echo.
-
+set tabcount=1
 for /f "usebackq delims=" %%i in ("%selectedfile%") do (
     echo 開いています: %%i
     start chrome "%%i"
+    set /a tabcount+=1
 )
 
 echo.
 echo 完了しました。
+echo 開いたタブの総数: !tabcount!個 （ストップウォッチサイト1個 + URLファイル内のURL !tabcount-1!個）
 pause
 exit /b
 
