@@ -2,11 +2,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // ステータスの定義
     const STATUS = {
         NOT_STARTED: { key: 'not_started', label: '未着手', class: 'bg-secondary' },
+        IN_PROGRESS: { key: 'in_progress', label: '着手', class: 'bg-primary' },
         ON_HOLD: { key: 'on_hold', label: '保留', class: 'bg-warning text-dark' },
         COMPLETED: { key: 'completed', label: '完了', class: 'bg-success' }
     };
     
-    const STATUS_ORDER = [STATUS.NOT_STARTED, STATUS.ON_HOLD, STATUS.COMPLETED];
+    const STATUS_ORDER = [STATUS.NOT_STARTED, STATUS.IN_PROGRESS, STATUS.ON_HOLD, STATUS.COMPLETED];
     
     // ステータスを取得する関数
     function getStatus(title) {
@@ -80,11 +81,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     viewCountSpan.className = 'badge bg-info text-dark';
                     viewCountSpan.textContent = `閲覧: ${viewCount}回`;
                     
-                    // リンククリック時の閲覧回数更新
+                    // リンククリック時の閲覧回数更新とステータス自動変更
                     link.addEventListener('click', () => {
+                        // 閲覧回数の更新
                         const currentCount = parseInt(localStorage.getItem(`view_${title}`) || 0);
                         localStorage.setItem(`view_${title}`, currentCount + 1);
                         viewCountSpan.textContent = `閲覧: ${currentCount + 1}回`;
+                        
+                        // 未着手の場合のみ、着手に自動変更
+                        if (currentStatus.key === STATUS.NOT_STARTED.key) {
+                            setStatus(title, STATUS.IN_PROGRESS);
+                            currentStatus = STATUS.IN_PROGRESS;
+                            statusBadge.className = `badge ${currentStatus.class}`;
+                            statusBadge.textContent = currentStatus.label;
+                        }
                     });
                     
                     rightContainer.appendChild(statusBadge);
