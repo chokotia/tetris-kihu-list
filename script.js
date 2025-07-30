@@ -3,11 +3,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const STATUS = {
         NOT_STARTED: { key: 'not_started', label: '未着手', class: 'bg-secondary' },
         IN_PROGRESS: { key: 'in_progress', label: '着手', class: 'bg-primary' },
-        ON_HOLD: { key: 'on_hold', label: '保留', class: 'bg-warning text-dark' },
-        COMPLETED: { key: 'completed', label: '完了', class: 'bg-success' }
+        COMPLETED: { key: 'completed', label: '完了', class: 'bg-success' },
+        ON_HOLD: { key: 'on_hold', label: '保留', class: 'bg-warning text-dark' }
     };
     
-    const STATUS_ORDER = [STATUS.NOT_STARTED, STATUS.IN_PROGRESS, STATUS.ON_HOLD, STATUS.COMPLETED];
+    const STATUS_ORDER = [STATUS.NOT_STARTED, STATUS.IN_PROGRESS, STATUS.COMPLETED, STATUS.ON_HOLD];
     
     // ステータスを取得する関数
     function getStatus(title) {
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     leftContainer.appendChild(link);
                     
-                    // 右側：ステータスと閲覧回数
+                    // 右側：ステータス
                     const rightContainer = document.createElement('div');
                     rightContainer.className = 'd-flex align-items-center gap-2';
                     
@@ -75,19 +75,8 @@ document.addEventListener('DOMContentLoaded', function() {
                         statusBadge.textContent = currentStatus.label;
                     });
                     
-                    // 閲覧回数バッジ
-                    const viewCount = localStorage.getItem(`view_${title}`) || 0;
-                    const viewCountSpan = document.createElement('span');
-                    viewCountSpan.className = 'badge bg-info text-dark';
-                    viewCountSpan.textContent = `閲覧: ${viewCount}回`;
-                    
-                    // リンククリック時の閲覧回数更新とステータス自動変更
+                    // リンククリック時のステータス自動変更
                     link.addEventListener('click', () => {
-                        // 閲覧回数の更新
-                        const currentCount = parseInt(localStorage.getItem(`view_${title}`) || 0);
-                        localStorage.setItem(`view_${title}`, currentCount + 1);
-                        viewCountSpan.textContent = `閲覧: ${currentCount + 1}回`;
-                        
                         // 未着手の場合のみ、着手に自動変更
                         if (currentStatus.key === STATUS.NOT_STARTED.key) {
                             setStatus(title, STATUS.IN_PROGRESS);
@@ -98,7 +87,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
                     
                     rightContainer.appendChild(statusBadge);
-                    rightContainer.appendChild(viewCountSpan);
                     
                     item.appendChild(leftContainer);
                     item.appendChild(rightContainer);
